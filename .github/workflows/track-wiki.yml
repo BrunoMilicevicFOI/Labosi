@@ -1,0 +1,45 @@
+name: Track Wiki Changes
+
+on:
+  gollum:
+
+permissions:
+  contents: write
+
+jobs:
+  log-wiki-change:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Record wiki contribution
+        env:
+          PAGE_NAME: ${{ github.event.pages[0].title }}
+          ACTION: ${{ github.event.pages[0].action }}
+          ACTOR: ${{ github.actor }}
+          SHA: ${{ github.event.pages[0].sha }}
+        run: |
+          TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          LOG_FILE="wiki-contributions.md"
+
+          if [ ! -f "$LOG_FILE" ]; then
+            echo "# Wiki Contributions" > "$LOG_FILE"
+            echo "" >> "$LOG_FILE"
+            echo "Automatski zabilježene promjene na wiki stranicama." >> "$LOG_FILE"
+            echo "" >> "$LOG_FILE"
+            echo "| Datum i vrijeme | Korisnik | Stranica | Radnja | SHA |" >> "$LOG_FILE"
+            echo "|-----------------|----------|----------|--------|-----|" >> "$LOG_FILE"
+          fi
+
+          echo "| $TIMESTAMP | $ACTOR | $PAGE_NAME | $ACTION | \`${SHA:0:7}\` |" >> "$LOG_FILE"
+
+      - name: Commit wiki contribution log
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add wiki-contributions.md
+          git commit -m "wiki: zabilježi promjenu na stranici '${{ github.event.pages[0].title }}' (${{ github.event.pages[0].action }}) od ${{ github.actor }}"
+          git push
