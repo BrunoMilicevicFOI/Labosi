@@ -41,8 +41,6 @@ namespace VarazdinTourManager.Repositories
             };
         }
 
-        // ==================== TURE ====================
-
         public List<Tura> DohvatiTure()
         {
             List<Tura> ture = new List<Tura>();
