@@ -1,22 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using _3.zadaca___VarazdinTourManager;
+using DBLayer;
+using System;
 using System.Windows.Forms;
 
-namespace _3.zadaca___VarazdinTourManager
+namespace VarazdinTourManager
 {
     internal static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
+            DB.SetConfiguration(
+                "PI2526_bmilicevi24_DB",
+                "PI2526_bmilicevi24",
+                "u8xxM.r949oPzmBK"
+            );
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new FrmLogin());
         }
     }
 }

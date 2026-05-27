@@ -1,6 +1,6 @@
 ﻿namespace _3.zadaca___VarazdinTourManager
 {
-    partial class Form1
+    partial class FrmLogin
     {
         /// <summary>
         /// Required designer variable.
